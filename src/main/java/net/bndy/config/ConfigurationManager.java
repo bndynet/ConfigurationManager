@@ -5,13 +5,21 @@ import org.apache.commons.configuration2.builder.FileBasedConfigurationBuilder;
 import org.apache.commons.configuration2.builder.fluent.Parameters;
 import org.apache.commons.configuration2.ex.ConfigurationException;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.Iterator;
 
 public class ConfigurationManager {
+	
+	public static boolean exists(String configurationFilename) {
+		// TODO:
+		return false;
+	}
+	
+	public static void createEmptyConfigurationFile(String configurationFilename) {
+		// TODO:
+	}
 
-    public static <T extends FileBasedConfiguration> FileBasedConfigurationBuilder<T> getConfigurationBuilder(String filename) {
+    @SuppressWarnings("unchecked")
+	public static <T extends FileBasedConfiguration> FileBasedConfigurationBuilder<T> getConfigurationBuilder(String filename) {
         checkConfigurationFile(filename);
 
         Parameters params = new Parameters();
