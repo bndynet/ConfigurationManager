@@ -17,5 +17,9 @@ gradle-app.setting
 .classpath
 .project
 .settings/
+.idea/
 bin/
+out/
+ConfigurationManager.iml
+
 
