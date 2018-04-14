@@ -5,19 +5,39 @@ import org.apache.commons.configuration2.builder.FileBasedConfigurationBuilder;
 import org.apache.commons.configuration2.builder.fluent.Parameters;
 import org.apache.commons.configuration2.ex.ConfigurationException;
 
+import java.io.File;
+import java.io.IOException;
+import java.net.URL;
+import java.nio.file.Paths;
 import java.util.Iterator;
 
 public class ConfigurationManager {
 	
+	public static <T> boolean exists(String configurationFilename, Class<T> cls) {
+		return new File(getAbsolutePath(configurationFilename, cls)).exists();
+	}
+	
 	public static boolean exists(String configurationFilename) {
-		// TODO:
-		return false;
+		return exists(configurationFilename, null);
+	}
+	
+	public static <T> void createEmptyConfigurationFile(String configurationFilename, Class<T> cls) {
+		if (exists(configurationFilename, cls)) {
+			try {
+				File file = new File(getAbsolutePath(configurationFilename, cls));
+				File parent = file.getParentFile();
+				if (!parent.exists()) parent.mkdirs();
+				file.createNewFile();
+			} catch (IOException ex) {
+				ex.printStackTrace();
+			}
+		}
 	}
 	
 	public static void createEmptyConfigurationFile(String configurationFilename) {
-		// TODO:
+		createEmptyConfigurationFile(configurationFilename, null);
 	}
-
+	
     @SuppressWarnings("unchecked")
 	public static <T extends FileBasedConfiguration> FileBasedConfigurationBuilder<T> getConfigurationBuilder(String filename) {
         checkConfigurationFile(filename);
@@ -146,6 +166,13 @@ public class ConfigurationManager {
             throw new Error("The file name MUST not be empty.");
         }
     }
+
+	private static <T> String getAbsolutePath(String configurationFilename, Class<T> cls) {
+		URL location = cls == null ? ConfigurationManager.class.getClassLoader().getResource("") : cls.getResource("");
+		String path = Paths.get(location.getPath(), configurationFilename).toAbsolutePath().toString();
+		return path;
+	}
+
 
     protected enum Action {
         SAVE,
